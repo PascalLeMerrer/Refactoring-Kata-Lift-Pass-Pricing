@@ -47,18 +47,11 @@ def prices():
     return res
 
 def is_holiday_date(connection, date):
+    if not date:
+        return False
     cursor = connection.cursor()
-    cursor.execute('SELECT * FROM holidays')
-    for row in cursor.fetchall():
-        holiday = row[0]
-        if (
-                date
-                and date.year == holiday.year
-                and date.month == holiday.month
-                and holiday.day == date.day
-        ):
-            return True
-    return False
+    cursor.execute(f"SELECT * FROM holidays where holiday='{date.strftime('%Y-%m-%d')}'")
+    return cursor.rowcount > 0
 
 
 def get_pass(connection):
